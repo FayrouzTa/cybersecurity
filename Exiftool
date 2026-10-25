@@ -1,0 +1,128 @@
+# 📸 ExifTool — Beginner Notes
+
+ExifTool is a command-line tool for reading and editing metadata in photos and other files.
+
+Metadata is information stored inside a file, such as:
+- Camera or phone model
+- Date and time the photo was taken
+- GPS coordinates, if recorded
+- Image dimensions
+- Software used to edit the image
+
+## 1. Check the installation
+
+Open Terminal and run:
+
+```bash
+exiftool -ver
+```
+
+This displays the installed version.
+
+ExifTool does not have an app window: you use it in Terminal.
+
+## 2. Read a photo’s metadata
+
+```bash
+exiftool "photo.jpg"
+```
+
+Replace `photo.jpg` with the file’s name or full path.
+
+On Mac, an easy way is:
+1. Type `exiftool` followed by a space.
+2. Drag the photo from Finder into Terminal.
+3. Press Enter.
+
+Reading metadata with this command does not modify the photo.
+
+## 3. Display specific information
+
+### Camera brand and model
+
+```bash
+exiftool -Make -Model "photo.jpg"
+```
+
+### Original capture date and time
+
+```bash
+exiftool -DateTimeOriginal "photo.jpg"
+```
+
+### Image dimensions
+
+```bash
+exiftool -ImageWidth -ImageHeight "photo.jpg"
+```
+
+### All GPS information
+
+```bash
+exiftool '-GPS*' "photo.jpg"
+```
+
+The quotes prevent zsh from treating the asterisk as a filename pattern.
+
+### GPS coordinates in decimal format
+
+```bash
+exiftool -n -GPSLatitude -GPSLongitude "photo.jpg"
+```
+
+The `-n` option displays numeric values without the usual formatting.
+
+To search Google Maps, enter the results as:
+
+latitude, longitude
+
+Example:
+
+50.8503, 4.3517
+
+Negative latitude means South; negative longitude means West.
+
+## 4. Inspect a folder
+
+```bash
+exiftool "/path/to/folder"
+```
+
+To include its subfolders:
+
+```bash
+exiftool -r "/path/to/folder"
+```
+
+## 5. Save the results as a text file
+
+```bash
+exiftool "photo.jpg" > metadata.txt
+```
+
+This creates `metadata.txt` in the current Terminal folder.
+
+Warning: `>` replaces the contents if that text file already exists.
+
+## 6. Show duplicate tags and their groups
+
+```bash
+exiftool -a -G1 -s "photo.jpg"
+```
+
+- `-a`: shows duplicate tags.
+- `-G1`: shows which metadata group each tag belongs to.
+- `-s`: shows tag names, useful for writing commands.
+
+## Investigation reminders
+
+- GPS information is not present in every photo.
+- Websites and messaging apps may remove metadata.
+- Metadata can be edited, so it is a clue rather than proof.
+- File modification dates can differ from the date the photo was taken.
+- Keep original evidence and work on a copy.
+- Check reports for private information before uploading them to GitHub.
+
+## Official website
+
+https://exiftool.org/
