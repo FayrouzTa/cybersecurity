@@ -1,0 +1,139 @@
+# 📄 ODT Files — Beginner Notes
+
+## What is an ODT file?
+
+ODT stands for **OpenDocument Text**.
+
+It is a document format used by applications such as LibreOffice Writer. It can contain text, images, tables, formatting and metadata.
+
+## An ODT file is also a ZIP archive
+
+Although it looks like a single document, an ODT file contains several files and folders packaged together.
+
+You can inspect these contents without opening the document in a word processor.
+
+## 1. Identify the file type
+
+In Terminal:
+
+```bash
+file "document.odt"
+```
+
+The `file` command examines the file’s contents to identify its type.
+
+A filename extension alone does not guarantee the actual file type.
+
+## 2. Read its metadata with ExifTool
+
+```bash
+exiftool "document.odt"
+```
+
+Depending on the document, this may reveal:
+- Creator or author
+- Creation and modification dates
+- Editing software
+- Document title
+- Other document properties
+
+Not every document contains all these details.
+
+## 3. List the contents without extracting
+
+```bash
+unzip -l "document.odt"
+```
+
+The `-l` option lists the files inside the archive.
+
+Common entries include:
+
+| File or folder | Purpose |
+| --- | --- |
+| `content.xml` | Document text and content structure |
+| `meta.xml` | Metadata such as creator and dates |
+| `styles.xml` | Formatting and styles |
+| `settings.xml` | Application settings |
+| `Pictures/` | Embedded images, when present |
+| `META-INF/manifest.xml` | List of package contents and their media types |
+| `mimetype` | Identifies the document format |
+
+## 4. Read the metadata XML directly
+
+```bash
+unzip -p "document.odt" meta.xml
+```
+
+The `-p` option prints an archived file’s contents into Terminal without extracting it.
+
+For easier reading on macOS:
+
+```bash
+unzip -p "document.odt" meta.xml | xmllint --format -
+```
+
+- `|` sends the output of the first command into the next.
+- `xmllint --format` formats the XML.
+- The final `-` tells xmllint to read that incoming output.
+
+Possible metadata tags include:
+
+| XML tag | Meaning |
+| --- | --- |
+| `<meta:initial-creator>` | Initial creator recorded in the document |
+| `<dc:creator>` | Creator associated with the latest modification |
+| `<meta:creation-date>` | Recorded creation date |
+| `<dc:date>` | Recorded last modification date |
+| `<meta:generator>` | Software that generated the document |
+
+## 5. Inspect the document content
+
+```bash
+unzip -p "document.odt" content.xml | xmllint --format -
+```
+
+This displays the XML structure containing the document’s text.
+
+It is not a clean plain-text version: XML tags and formatting information remain visible.
+
+## 6. Extract the contents into a folder
+
+```bash
+unzip "document.odt" -d "document_extracted"
+```
+
+The `-d` option chooses the destination folder.
+
+You can then inspect the extracted files:
+
+```bash
+ls "document_extracted"
+```
+
+On Mac, open the folder in Finder:
+
+```bash
+open "document_extracted"
+```
+
+There is no need to rename the ODT file to `.zip` before using these commands.
+
+## Investigation reminders
+
+- Work on a copy and preserve the original.
+- Metadata can be edited or removed.
+- An author field is a clue, not proof of who wrote the document.
+- Embedded images may have their own metadata.
+- Password-protected documents may prevent inspection of encrypted contents.
+- Review extracted information before sharing it publicly.
+
+## Quick reference
+
+| Goal | Command |
+| --- | --- |
+| Identify the file | `file "document.odt"` |
+| Read metadata | `exiftool "document.odt"` |
+| List packaged files | `unzip -l "document.odt"` |
+| Read metadata XML | `unzip -p "document.odt" meta.xml` |
+| Extract the package | `unzip "document.odt" -d "document_extracted"` |
