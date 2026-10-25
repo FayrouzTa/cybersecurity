@@ -1,0 +1,16 @@
+# Base64
+
+## What is it?
+Base64 is an encoding method used to represent data as text.
+
+## How to recognize it ?
+-uppercase and lowercase letters
+-numbers
+-sometimes +, / and =
+-length usually divisible by 4
+
+## Linux command 
+echo 'SgvFbno=' | base64 -d
+
+## difference from hashing
+Base64 can be decoded while hashing cannot.
